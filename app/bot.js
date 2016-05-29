@@ -7,25 +7,19 @@ var Bot = (function () {
         this.data = parameters["data"];
     }
     Bot.prototype.generateHash = function () {
-        var seed = 0;
-        switch (this.command) {
-            case "color":
-                if (this.data == "red") {
-                    seed = 99111222212214;
-                }
-                break;
-            case "xxxxxxxx":
-                if (this.data == "yyyyyyyyy") {
-                    seed = 412412412412412544;
-                }
-                break;
-            case "daaaaaaaaaaaaaaaaaa":
-                if (this.data == "dl") {
-                    seed = 9797979798079946;
-                }
-                break;
+        var com_buf = "";
+        for (var i = 0; i < this.command.length; i++) {
+            com_buf += this.command.charCodeAt(i).toString();
         }
-        this.hash = scientificNotation(seed).toString(16);
+        var commandAscii = parseInt(com_buf);
+        var extractedCommand = scientificNotation(commandAscii);
+        var dat_buf = "";
+        for (var i = 0; i < this.data.length; i++) {
+            dat_buf += this.data.charCodeAt(i).toString();
+        }
+        var dataAscii = parseInt(dat_buf);
+        var extractedData = scientificNotation(dataAscii);
+        this.hash = (extractedCommand + extractedData).toString(16);
     };
     return Bot;
 })();
@@ -33,26 +27,10 @@ var Bot = (function () {
 // If power of e is greater than 20, get the number between "." and "e"
 // Else return the number itself
 function scientificNotation(num) {
-    var data = parseInt(num).toExponential(16);
+    var data = num.toExponential(16);
     var elements = data.split("e+");
-    var result = (parseInt(elements[1]) > 20) ? elements[0].split(".")[1] : num;
+    var power = parseInt(elements[1]);
+    var result = (power > 20) ? parseInt(elements[0].split(".")[1] + power.toString()) : num;
     return result;
 }
 module.exports = Bot;
-/*
-5a2421317676
-‭99111222212214
-
-‬5b92ee76ecdc280
-‭412412412412412544‬
-412 412 412 412 412 544
-
-412 412 412 412 412 412 + 122
-
-22cf35f16189ca
-‭9797979798079946‬
-
-97 97 97 97 98079946
-
-97 97 97 97 97 97 97 97 + 100149
-*/ 
