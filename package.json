@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/sukeshni/sprint2-bot-challenge#readme",
   "devDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^3.5.0",
+    "tsc": "^1.5.3"
   }
 }
